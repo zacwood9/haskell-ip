@@ -84,7 +84,7 @@ import Data.Text.Short (ShortText)
 import Data.WideWord.Word128 (Word128(..), zeroWord128)
 import Data.Word
 import Foreign.Storable (Storable)
-import GHC.Exts (Int#,Word#,Int(I#))
+import GHC.Exts (Int#,Word#,Word16#,Int(I#))
 import GHC.Generics (Generic)
 import GHC.Word (Word16(W16#))
 import Numeric (showHex)
@@ -483,7 +483,7 @@ piece :: Int -> Word16 -> Int -> Int -> BB.Builder 5
 piece (I# ix) (W16# w) (I# start) (I# end) =
   piece# ix w start end
 
-piece# :: Int# -> Word# -> Int# -> Int# -> BB.Builder 5
+piece# :: Int# -> Word16# -> Int# -> Int# -> BB.Builder 5
 {-# noinline piece# #-}
 piece# !ix# !w# !start# !end# = case compare ix start of
   LT -> BB.ascii ':' `BB.append` BB.word16LowerHex w
@@ -541,7 +541,7 @@ longestRun !w0 !w1 !w2 !w3 !w4 !w5 !w6 !w7 = id
 -- the leftmost longest string of zeroes in the address.
 -- Per <https://tools.ietf.org/html/rfc5952#section-5 RFC 5952 Section 5>,
 -- this uses mixed notation when encoding an IPv4-mapped IPv6 address.
--- 
+--
 -- >>> encodeShort $ fromWord16s 0xDEAD 0xBEEF 0x0 0x0 0x0 0x0ABC 0x0 0x1234
 -- "dead:beef::abc:0:1234"
 encodeShort :: IPv6 -> ShortText
@@ -628,7 +628,7 @@ postZeroesBegin e !marr !ix !compress = do
       postZeroes e marr (ix + 1) compress
 
 -- Should be run right before a colon.
-postZeroes :: 
+postZeroes ::
      e
   -> MutablePrimArray s Word16 -- length must be 8
   -> Int -- current index in array

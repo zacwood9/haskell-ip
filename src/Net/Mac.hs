@@ -766,19 +766,19 @@ instance Prim Mac where
           s1 -> go (ix# +# 1#) s1
         else s0
 
-macToWord16A# :: Mac -> Word#
+macToWord16A# :: Mac -> Word16#
 macToWord16A# (Mac w) = case word64ToWord16 (unsafeShiftR w 32) of
   W16# x -> x
 
-macToWord16B# :: Mac -> Word#
+macToWord16B# :: Mac -> Word16#
 macToWord16B# (Mac w) = case word64ToWord16 (unsafeShiftR w 16) of
   W16# x -> x
 
-macToWord16C# :: Mac -> Word#
+macToWord16C# :: Mac -> Word16#
 macToWord16C# (Mac w) = case word64ToWord16 w of
   W16# x -> x
 
-macFromWord16# :: Word# -> Word# -> Word# -> Mac
+macFromWord16# :: Word16# -> Word16# -> Word16# -> Mac
 macFromWord16# a b c = Mac
     $ (unsafeShiftL (word16ToWord64 (W16# a)) 32)
   .|. (unsafeShiftL (word16ToWord64 (W16# b)) 16)

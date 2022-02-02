@@ -114,7 +114,7 @@ import Data.Vector.Generic.Mutable (MVector(..))
 import Data.Word
 import Foreign.Ptr (Ptr,plusPtr)
 import Foreign.Storable (Storable, poke)
-import GHC.Exts (Word#)
+import GHC.Exts (Word#, word32ToWord#, wordToWord32#)
 import GHC.Generics (Generic)
 import GHC.Word (Word32(W32#))
 import Prelude hiding (any, print, print)
@@ -606,11 +606,11 @@ type IPv4# = Word#
 
 -- | Convert an unboxed IPv4 address to a boxed one.
 box :: IPv4# -> IPv4
-box w = IPv4 (W32# w)
+box w = IPv4 (W32# (wordToWord32# w))
 
 -- | Convert a boxed IPv4 address to an unboxed one.
 unbox :: IPv4 -> IPv4#
-unbox (IPv4 (W32# w)) = w
+unbox (IPv4 (W32# w)) = (word32ToWord# w)
 
 -- | A 32-bit Internet Protocol version 4 address. To use this with the
 --   @network@ library, it is necessary to use @Network.Socket.htonl@ to
